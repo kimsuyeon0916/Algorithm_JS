@@ -2,7 +2,10 @@ function solution(n, s) {
     var answer = [-1];
     let 몫 = Math.floor(s/n);
     let 나머지 = s%n;
-    answer = 몫>0 ? Array(n).fill(몫) : [-1]
+    
+    if(몫===0) return answer;
+    
+    answer = Array(n).fill(몫);
     for(let i=0;i<answer.length && 몫>0;i++){
         if(나머지>0){
             answer[i]+=1;
