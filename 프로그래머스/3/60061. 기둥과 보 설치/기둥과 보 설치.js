@@ -1,18 +1,21 @@
 const 규칙만족 = (x, y, a, answer) => {
     if (a === 0) { // 기둥인 경우
-        if (y === 0 || answer.find(arr => arr[0] === x - 1 && arr[1] === y && arr[2] === 1) || answer.find(arr => arr[0] === x && arr[1] === y && arr[2] === 1) || answer.find(arr => arr[0] === x && arr[1] === y - 1 && arr[2] === 0)) {
+        if (y === 0 || answer.find(([l, m, n]) => (l === x - 1 && m === y && n === 1) || ( l === x && m === y && n === 1) || (l === x && m === y - 1 && n === 0))) {
             return true;
         }
     }
     else { // 보인 경우
-        if (answer.find(arr => arr[0] === x && arr[1] === y - 1 && arr[2] === 0) || 
-            answer.find(arr => arr[0] === x + 1 && arr[1] === y - 1 && arr[2] === 0) || 
-            (answer.find(arr => arr[0] === x - 1 && arr[1] === y && arr[2] === 1) && answer.find(arr => arr[0] === x + 1 && arr[1] === y && arr[2] === 1))) {
+        if (
+            answer.find(([l, m, n]) => (l === x && m === y - 1 && n === 0) || 
+            (l === x + 1 && m === y - 1 && n === 0)) || 
+            (answer.find(([l, m, n]) => (l === x - 1 && m === y && n === 1)) && 
+             answer.find(([l, m, n]) => (l === x + 1 && m === y && n === 1)))) {
             return true;
         }
     }
     return false;
 }
+
 
 
 function solution(n, build_frame) {
@@ -26,18 +29,18 @@ function solution(n, build_frame) {
         }
         // 삭제 시
         else {
-            const 삭제한배열 = answer.filter(arr => JSON.stringify(arr) !== JSON.stringify([x, y, a]));
+            const 삭제후배열 = answer.filter(([l, m, n]) => !(l === x && m === y && n === a));
             
             let 삭제가능 = true;
-            for (let j = 0; j < 삭제한배열.length; j++) {
-                const [x, y, a] = 삭제한배열[j];
-                if (!규칙만족(x, y, a, 삭제한배열)) {
+            for (let j = 0; j < 삭제후배열.length; j++) {
+                const [x, y, a] = 삭제후배열[j];
+                if (!규칙만족(x, y, a, 삭제후배열)) {
                     삭제가능 = false;
                     break;
                 }
             }
             
-            answer = 삭제한배열;
+            answer = 삭제후배열;
             if (!삭제가능) {
                 answer.push([x, y, a]); // 삭제 못하면 다시 추가
             } 
